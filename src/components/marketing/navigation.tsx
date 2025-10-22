@@ -16,6 +16,7 @@ import {
 import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { ModeToggle } from "@/components/marketing/mode-toggle";
 
 const features = [
   {
@@ -243,6 +244,7 @@ export default function Navigation() {
 
             {/* Desktop CTA */}
             <div className="hidden lg:flex items-center space-x-4">
+              <ModeToggle />
               <Button variant="ghost" size="sm" asChild>
                 <Link href="https://app.usecorvex.com">Login</Link>
               </Button>
@@ -351,6 +353,9 @@ export default function Navigation() {
 
                 {/* Mobile CTA */}
                 <div className="flex flex-col space-y-3 pt-4 border-t border-border/20">
+                  <div className="flex justify-center">
+                    <ModeToggle />
+                  </div>
                   <Button variant="ghost" size="sm" asChild>
                     <Link href="https://app.usecorvex.com" onClick={() => setIsMobileMenuOpen(false)}>
                       Login

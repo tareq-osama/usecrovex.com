@@ -1,25 +1,138 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Check, X, Play, Globe, Zap, Users, BarChart3, Clock, Star } from "lucide-react";
 import FeaturesSlider from "@/components/marketing/features";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 export default function HomePage() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLParagraphElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
+  
+  // Scroll-triggered section refs
+  const scrollSectionRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement[]>([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Set initial states for hero section
+      gsap.set([labelRef.current, titleRef.current, subtitleRef.current, buttonsRef.current], {
+        opacity: 0,
+        y: 30,
+      });
+
+      // Create timeline for hero section
+      const tl = gsap.timeline();
+
+      tl.to(labelRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      })
+        .to(titleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        }, "-=0.4")
+        .to(subtitleRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+        }, "-=0.6")
+        .to(buttonsRef.current, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power3.out",
+        }, "-=0.4");
+
+      // Add subtle floating animation to the underline
+      const underlineRef = titleRef.current?.querySelector('.absolute');
+      if (underlineRef) {
+        gsap.to(underlineRef, {
+          scaleX: 1.1,
+          duration: 2,
+          ease: "power2.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      }
+
+      // Scroll-triggered animations
+      if (scrollSectionRef.current) {
+        // Animate stats section
+        gsap.fromTo(statsRef.current, 
+          { opacity: 0, y: 100 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 80%",
+              end: "bottom 20%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+
+        // Animate cards with stagger
+        cardsRef.current.forEach((card, index) => {
+          if (card) {
+            gsap.fromTo(card,
+              { opacity: 0, y: 50, scale: 0.9 },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.8,
+                ease: "power3.out",
+                delay: index * 0.2,
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 85%",
+                  end: "bottom 15%",
+                  toggleActions: "play none none reverse"
+                }
+              }
+            );
+          }
+        });
+      }
+    }, [heroRef, scrollSectionRef]);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative w-full overflow-hidden">
+      <section ref={heroRef} className="relative w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background/90" />
         <div className="relative items-center justify-center flex-col mx-auto px-6 h-svh flex text-center">
           {/* Small label above headline */}
-          <p className="text-sm text-muted-foreground mb-8 font-medium tracking-wide">
+          <p ref={labelRef} className="text-sm text-muted-foreground mb-8 font-medium tracking-wide">
             From solo to scale
           </p>
           
           {/* Main headline */}
           <div className="flex flex-col items-center justify-center">
-          <h1 className=" text-start text-6xl md:text-6xl font-bold text-foreground leading-[1.1] mb-8 tracking-tight">
+          <h1 ref={titleRef} className=" text-start text-6xl md:text-6xl font-bold text-foreground leading-[1.1] mb-8 tracking-tight">
             Start growing your business today
             <br />
             <span className="relative">
@@ -30,13 +143,13 @@ export default function HomePage() {
           </div>
 
           {/* Subtitle */}
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p ref={subtitleRef} className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
 Create invoices, manage tasks, and communicate with your clients with your
             very own white-labeled client portal. <span className="font-semibold text-foreground">5-min setup, <span> <br></br> ready to go this afternoon.</span></span>
           </p>
           
           {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div ref={buttonsRef} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Button size="lg" className="px-8 py-3 text-base font-semibold">
               Set up your portal
             </Button>
@@ -50,7 +163,117 @@ Create invoices, manage tasks, and communicate with your clients with your
 
       <FeaturesSlider/>
 
+      {/* Scroll-Triggered Stats Section */}
+      <section ref={scrollSectionRef} className="w-full py-24 bg-gradient-to-br from-muted/30 to-background">
+        <div className="max-w-6xl mx-auto px-6">
+          {/* Stats Section */}
+          <div ref={statsRef} className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              Trusted by businesses worldwide
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Join thousands of businesses that have transformed their operations with Corvex
+            </p>
+          </div>
 
+          {/* Animated Stats Cards */}
+          <div className="grid md:grid-cols-4 gap-8 mb-16">
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[0] = el; }}
+              className="text-center p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors"
+            >
+              <CardContent className="p-0">
+                <div className="text-3xl font-bold text-primary mb-2">500+</div>
+                <div className="text-sm text-muted-foreground">Active Businesses</div>
+              </CardContent>
+            </Card>
+
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[1] = el; }}
+              className="text-center p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors"
+            >
+              <CardContent className="p-0">
+                <div className="text-3xl font-bold text-primary mb-2">50K+</div>
+                <div className="text-sm text-muted-foreground">Tasks Completed</div>
+              </CardContent>
+            </Card>
+
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[2] = el; }}
+              className="text-center p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors"
+            >
+              <CardContent className="p-0">
+                <div className="text-3xl font-bold text-primary mb-2">99.9%</div>
+                <div className="text-sm text-muted-foreground">Uptime</div>
+              </CardContent>
+            </Card>
+
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[3] = el; }}
+              className="text-center p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors"
+            >
+              <CardContent className="p-0">
+                <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+                <div className="text-sm text-muted-foreground">Support</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Feature Cards with Scroll Animation */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[4] = el; }}
+              className="p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors group"
+            >
+              <CardContent className="p-0">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Zap className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground">Lightning Fast</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Experience blazing fast performance with our optimized infrastructure and smart caching.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[5] = el; }}
+              className="p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors group"
+            >
+              <CardContent className="p-0">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Users className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground">Team Collaboration</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Seamlessly collaborate with your team and clients in one unified workspace.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card 
+              ref={(el) => { if (el) cardsRef.current[6] = el; }}
+              className="p-6 bg-background/50 backdrop-blur-sm border-border/20 hover:border-primary/30 transition-colors group"
+            >
+              <CardContent className="p-0">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <BarChart3 className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground">Analytics & Insights</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Get detailed insights and analytics to make data-driven business decisions.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
 
       {/* Trusted By Section with Dashboard Preview */}
       <section className="w-full py-16 border-t border-border/20">
