@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -9,24 +9,24 @@ interface CorvexAILogoWithSkeletonProps {
    * Additional CSS classes for the container
    */
   className?: string;
-  
+
   /**
    * Additional CSS classes for the image
    */
   imageClassName?: string;
-  
+
   /**
    * Logo source path for dark theme
    * @default "/corvex-logo.svg"
    */
   srcDark?: string;
-  
+
   /**
    * Logo source path for light theme
    * @default "/corvex-logo-light.svg"
    */
   srcLight?: string;
-  
+
   /**
    * Alt text for the image
    * @default "Corvex"
@@ -43,6 +43,18 @@ export const CorvexAILogoWithSkeleton = ({
 }: CorvexAILogoWithSkeletonProps) => {
   const [lightLoaded, setLightLoaded] = useState(false);
   const [darkLoaded, setDarkLoaded] = useState(false);
+  const lightImgRef = useRef<HTMLImageElement>(null);
+  const darkImgRef = useRef<HTMLImageElement>(null);
+
+  // Check if images are already loaded (from cache)
+  useEffect(() => {
+    if (lightImgRef.current?.complete) {
+      setLightLoaded(true);
+    }
+    if (darkImgRef.current?.complete) {
+      setDarkLoaded(true);
+    }
+  }, []);
 
   return (
     <>
@@ -67,6 +79,7 @@ export const CorvexAILogoWithSkeleton = ({
         <div className="relative inline-block w-full h-full">
           {/* Light theme logo */}
           <img
+            ref={lightImgRef}
             src={srcLight}
             alt={alt}
             className={cn(
@@ -80,6 +93,7 @@ export const CorvexAILogoWithSkeleton = ({
 
           {/* Dark theme logo - for dark, midnight-dark, and black themes */}
           <img
+            ref={darkImgRef}
             src={srcDark}
             alt={alt}
             className={cn(
