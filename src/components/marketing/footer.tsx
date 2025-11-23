@@ -58,7 +58,7 @@ export default function Footer() {
           
                       {/* Logo */}
                       <Link href="/" className="flex items-center gap-2">
-                        <Image src="/corvexlogo.svg" alt="Corvex Logo" width={100} height={100} />
+                        <Image src="/corvexlogo.svg" alt="Corvex Logo" width={200} height={100} />
                       </Link>
 
           </div>

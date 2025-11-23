@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<null | "success" | "error">(null);
+  const [status, setStatus] = useState<null | "success" | "error" | "already-subscribed">(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,13 +15,32 @@ export default function WaitlistPage() {
     setLoading(true);
     setStatus(null);
 
-    // You would replace this with your real API call
     try {
-      // Example: await fetch("/api/waitlist", { ... })
-      await new Promise((resolve) => setTimeout(resolve, 1200)); // mock network
+      const response = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle specific error cases
+        if (response.status === 409) {
+          setStatus("already-subscribed");
+        } else {
+          setStatus("error");
+        }
+        return;
+      }
+
+      // Success
       setStatus("success");
       setEmail("");
     } catch (err) {
+      console.error("Error submitting waitlist:", err);
       setStatus("error");
     } finally {
       setLoading(false);
@@ -60,7 +79,12 @@ export default function WaitlistPage() {
           </form>
           {status === "success" && (
             <div className="mt-4 p-3 rounded-md text-center bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800">
-              You've been added to the waitlist!
+              You've been added to the waitlist! We'll notify you when we launch.
+            </div>
+          )}
+          {status === "already-subscribed" && (
+            <div className="mt-4 p-3 rounded-md text-center bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
+              This email is already on the waitlist. Thank you!
             </div>
           )}
           {status === "error" && (
