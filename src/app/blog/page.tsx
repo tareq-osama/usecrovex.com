@@ -1,59 +1,17 @@
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Calendar, Clock, User } from "lucide-react";
+import { getPosts, WordPressPost } from "@/lib/queries/get-posts";
+import { formatDate } from "@/lib/utils/date-formatter";
+import { stripHtml, estimateReadingTime } from "@/lib/utils";
 
-export default function BlogPage() {
-  const blogPosts = [
-    {
-      title: "How to Scale Your Consulting Business in 2024",
-      excerpt: "Discover the key strategies that successful consultants are using to grow their practices and increase revenue.",
-      author: "Sarah Chen",
-      date: "March 15, 2024",
-      readTime: "5 min read",
-      category: "Business Growth"
-    },
-    {
-      title: "The Complete Guide to Client Portal Best Practices",
-      excerpt: "Learn how to create a professional client portal that enhances your brand and improves client satisfaction.",
-      author: "Michael Rodriguez",
-      date: "March 12, 2024",
-      readTime: "8 min read",
-      category: "Client Experience"
-    },
-    {
-      title: "Automating Your Business: Tools and Strategies",
-      excerpt: "Explore the automation tools and strategies that can save you hours every week and help you scale efficiently.",
-      author: "Emily Watson",
-      date: "March 10, 2024",
-      readTime: "6 min read",
-      category: "Automation"
-    },
-    {
-      title: "Building Trust with Professional Branding",
-      excerpt: "How to use white-label solutions to build trust and credibility with your clients and prospects.",
-      author: "David Kim",
-      date: "March 8, 2024",
-      readTime: "4 min read",
-      category: "Branding"
-    },
-    {
-      title: "The Future of Client Communication",
-      excerpt: "Trends and technologies that are shaping how businesses communicate with their clients in 2024.",
-      author: "Lisa Thompson",
-      date: "March 5, 2024",
-      readTime: "7 min read",
-      category: "Communication"
-    },
-    {
-      title: "From Freelancer to Agency: Scaling Your Service Business",
-      excerpt: "A step-by-step guide to transitioning from a solo freelancer to a growing agency with multiple team members.",
-      author: "James Wilson",
-      date: "March 3, 2024",
-      readTime: "10 min read",
-      category: "Business Growth"
-    }
-  ];
+export default async function BlogPage() {
+  const posts = await getPosts(20);
+  const featuredPost = posts[0];
+  const otherPosts = posts.slice(1);
 
   return (
     <div className="min-h-screen bg-background">
@@ -97,45 +55,71 @@ export default function BlogPage() {
       </section>
 
       {/* Featured Post */}
-      <section className="w-full py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <Card className="border-border/20 overflow-hidden">
-            <div className="md:flex">
-              <div className="md:w-1/2 bg-muted/30 p-8 flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-2">Featured Post</p>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">
-                    How to Scale Your Consulting Business in 2024
-                  </h2>
-                  <p className="text-muted-foreground mb-6">
-                    Discover the key strategies that successful consultants are using to grow their practices and increase revenue.
-                  </p>
-                  <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-6">
-                    <div className="flex items-center gap-1">
-                      <User className="h-4 w-4" />
-                      <span>Sarah Chen</span>
+      {featuredPost && (
+        <section className="w-full py-16">
+          <div className="max-w-4xl mx-auto px-6">
+            <Card className="border-border/20 overflow-hidden">
+              <div className="md:flex">
+                <div className="md:w-1/2 bg-muted/30 p-8 flex items-center justify-center">
+                  <div className="w-full">
+                    <p className="text-sm text-muted-foreground mb-2">Featured Post</p>
+                    <h2 className="text-2xl font-bold text-foreground mb-4">
+                      {featuredPost.title}
+                    </h2>
+                    <p className="text-muted-foreground mb-6 line-clamp-4">
+                      {stripHtml(featuredPost.excerpt)}
+                    </p>
+                    <div className="flex items-center flex-wrap gap-4 text-sm text-muted-foreground mb-6">
+                      <div className="flex items-center gap-1">
+                        <User className="h-4 w-4" />
+                        <span>{featuredPost.author.node.name}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        <span>{formatDate(featuredPost.date)}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-4 w-4" />
+                        <span>{estimateReadingTime(featuredPost.content)}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      <span>March 15, 2024</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      <span>5 min read</span>
-                    </div>
+                    {featuredPost.categories.nodes.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {featuredPost.categories.nodes.map((category) => (
+                          <span
+                            key={category.slug}
+                            className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full"
+                          >
+                            {category.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <Link href={`/blog/${featuredPost.slug}`}>
+                      <Button>Read full article</Button>
+                    </Link>
                   </div>
-                  <Button>Read full article</Button>
+                </div>
+                <div className="md:w-1/2 bg-muted/50 p-8 flex items-center justify-center min-h-[300px]">
+                  {featuredPost.featuredImage?.node ? (
+                    <Image
+                      src={featuredPost.featuredImage.node.sourceUrl}
+                      alt={featuredPost.featuredImage.node.altText || featuredPost.title}
+                      width={featuredPost.featuredImage.node.mediaDetails.width || 600}
+                      height={featuredPost.featuredImage.node.mediaDetails.height || 400}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <p className="text-muted-foreground">Featured Image</p>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="md:w-1/2 bg-muted/50 p-8 flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-muted-foreground">Featured Image</p>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </section>
+            </Card>
+          </div>
+        </section>
+      )}
 
       {/* Blog Posts Grid */}
       <section className="w-full py-24">
@@ -150,43 +134,73 @@ export default function BlogPage() {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.slice(1).map((post, index) => (
-              <Card key={index} className="border-border/20 hover:border-primary/20 transition-colors">
-                <CardContent className="p-6">
-                  <div className="mb-4">
-                    <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
-                      {post.category}
-                    </span>
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-3 line-clamp-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                    <div className="flex items-center gap-1">
-                      <User className="h-3 w-3" />
-                      <span>{post.author}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      <span>{post.date}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="h-3 w-3" />
-                      {post.readTime}
-                    </span>
-                    <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
-                      Read more
-                      <ArrowRight className="ml-1 h-3 w-3" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {otherPosts.length > 0 ? (
+              otherPosts.map((post) => (
+                <Link key={post.id} href={`/blog/${post.slug}`}>
+                  <Card className="border-border/20 hover:border-primary/20 transition-colors h-full">
+                    <CardContent className="p-6 flex flex-col h-full">
+                      {post.featuredImage?.node && (
+                        <div className="mb-4 -mx-6 -mt-6">
+                          <Image
+                            src={post.featuredImage.node.sourceUrl}
+                            alt={post.featuredImage.node.altText || post.title}
+                            width={600}
+                            height={300}
+                            className="w-full h-48 object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        {post.categories.nodes.length > 0 ? (
+                          post.categories.nodes.slice(0, 2).map((category) => (
+                            <span
+                              key={category.slug}
+                              className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full"
+                            >
+                              {category.name}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+                            Article
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-semibold text-foreground mb-3 line-clamp-2">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-grow">
+                        {stripHtml(post.excerpt)}
+                      </p>
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
+                        <div className="flex items-center gap-1">
+                          <User className="h-3 w-3" />
+                          <span>{post.author.node.name}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          <span>{formatDate(post.date)}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between mt-auto">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {estimateReadingTime(post.content)}
+                        </span>
+                        <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
+                          Read more
+                          <ArrowRight className="ml-1 h-3 w-3" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-muted-foreground">No posts found. Check back soon for new articles!</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
