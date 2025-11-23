@@ -3,25 +3,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CorvexAILogoWithSkeleton } from "../CorvexAILogoWithSkeleton";
+import { features, solutions, resources } from "@/lib/navigation-data";
 
 const footerLinks = {
-  Links: [
-    { title: "Blog", href: "/blog" },
-    { title: "Help Center", href: "/help" },
-    { title: "Become an affiliate", href: "/affiliate" },
-    { title: "Leave us a testimonial", href: "/testimonial" },
-    { title: "Join our discord", href: "/discord" },
-    { title: "Test client portal live", href: "/demo" },
-  ],
-  Features: [
-    { title: "White label client portal for businesses", href: "/features/client-portal" },
-    { title: "Task management for businesses", href: "/features/tasks" },
-    { title: "Integrations & webhooks", href: "/features/integrations" },
-  ],
-  "Free resources": [
-    { title: "Productized service AI idea generator", href: "/tools/idea-generator" },
-    { title: "Productized service course", href: "/course" },
-  ],
+  Features: features,
+  Solutions: solutions,
+  Resources: resources,
   Legal: [
     { title: "Terms", href: "/terms" },
     { title: "Privacy", href: "/privacy" },

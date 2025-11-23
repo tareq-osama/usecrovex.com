@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Calendar, Clock, User, Tag } from "lucide-react";
 import { getPostBySlug } from "@/lib/queries/get-post-by-slug";
 import { getPosts } from "@/lib/queries/get-posts";
+import { getUserProfile } from "@/lib/queries/get-user-profile";
 import { formatDate } from "@/lib/utils/date-formatter";
 import { estimateReadingTime, stripHtml } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -71,6 +72,35 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   if (!post) {
     notFound();
+  }
+
+  // Try to get R2 profile picture - first from post query, then from separate user query
+  let authorAvatar = post.author.node.r2ProfilePicture || null;
+  
+  // If not available in post query, try fetching separately
+  if (!authorAvatar) {
+    const authorProfile = await getUserProfile(post.author.node.id, post.author.node.databaseId);
+    authorAvatar = authorProfile?.r2ProfilePicture || null;
+  }
+  
+  // Only fall back to Gravatar if R2 picture is not available
+  // Don't use Gravatar if we have an R2 URL
+  if (!authorAvatar) {
+    authorAvatar = post.author.node.avatar?.url || null;
+  }
+  
+  // Debug: Log what we're getting (remove in production)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('=== FINAL AVATAR RESOLUTION ===');
+    console.log('Author ID:', post.author.node.id);
+    console.log('Author databaseId:', post.author.node.databaseId);
+    console.log('Author name:', post.author.node.name);
+    console.log('r2ProfilePicture from post query:', post.author.node.r2ProfilePicture);
+    console.log('avatar.url from post query:', post.author.node.avatar?.url);
+    console.log('Final authorAvatar:', authorAvatar);
+    console.log('Is R2 URL:', authorAvatar?.includes('r2.dev'));
+    console.log('Is Gravatar URL:', authorAvatar?.includes('gravatar.com'));
+    console.log('================================');
   }
 
   return (
@@ -183,14 +213,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <Card className="mt-12 border-border/20">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
-                {post.author.node.avatar?.url && (
+                {authorAvatar ? (
                   <Image
-                    src={post.author.node.avatar.url}
+                    src={authorAvatar}
                     alt={post.author.node.name}
                     width={64}
                     height={64}
-                    className="rounded-full"
+                    className="rounded-full object-cover"
                   />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-primary font-semibold text-lg">
+                      {post.author.node.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
                 )}
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
@@ -218,4 +254,3 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </div>
   );
 }
-

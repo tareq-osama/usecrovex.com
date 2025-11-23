@@ -14,11 +14,14 @@ const GET_POST_BY_SLUG = `
       content
       author {
         node {
+          id
+          databaseId
           name
           slug
           avatar {
             url
           }
+          r2ProfilePicture
         }
       }
       featuredImage {
@@ -65,11 +68,14 @@ export interface SinglePost extends WordPressPost {
   };
   author: {
     node: {
+      id: string;
+      databaseId: number;
       name: string;
       slug: string;
       avatar?: {
         url: string;
       } | null;
+      r2ProfilePicture?: string | null;
     };
   };
 }
@@ -77,6 +83,17 @@ export interface SinglePost extends WordPressPost {
 export async function getPostBySlug(slug: string): Promise<SinglePost | null> {
   try {
     const data = await graphqlClient.request<{ postBy: SinglePost | null }>(GET_POST_BY_SLUG, { slug });
+    
+    // Debug: Log the raw author data from GraphQL
+    if (process.env.NODE_ENV === 'development' && data.postBy) {
+      console.log('=== POST QUERY AUTHOR DATA ===');
+      console.log('Full author node:', JSON.stringify(data.postBy.author.node, null, 2));
+      console.log('r2ProfilePicture from post query:', data.postBy.author.node.r2ProfilePicture);
+      console.log('avatar.url from post query:', data.postBy.author.node.avatar?.url);
+      console.log('author ID:', data.postBy.author.node.id);
+      console.log('author databaseId:', data.postBy.author.node.databaseId);
+    }
+    
     return data.postBy;
   } catch (error) {
     console.error("Error fetching post by slug:", error);

@@ -17,60 +17,8 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { ModeToggle } from "@/components/marketing/mode-toggle";
-import { CorvexAILogoWithSkeleton } from "@/components/CorvexAILogoWithSkeleton"; 
-const features = [
-  {
-    title: "White-label client portal",
-    href: "/features/client-portal",
-    description: "Professional client portal for businesses"
-  },
-  {
-    title: "Task management",
-    href: "/features/tasks",
-    description: "Task management for businesses"
-  },
-  {
-    title: "Integrations & webhooks",
-    href: "/features/integrations",
-    description: "Integrations & webhooks"
-  }
-];
-
-const solutions = [
-  {
-    title: "For Small Businesses",
-    href: "/solutions/small-business",
-    description: "Complete business management platform for solo entrepreneurs"
-  },
-  {
-    title: "For Consultants",
-    href: "/solutions/consultants",
-    description: "Professional consulting platform for experts"
-  },
-  {
-    title: "Case Studies",
-    href: "/case-studies",
-    description: "See how businesses transformed with Corvex"
-  }
-];
-
-const resources = [
-  {
-    title: "Help Center",
-    href: "/help",
-    description: "Get answers to your questions quickly"
-  },
-  {
-    title: "Blog",
-    href: "/blog",
-    description: "Latest insights on business growth and management"
-  },
-  {
-    title: "Documentation",
-    href: "/docs",
-    description: "Complete guide to using Corvex platform"
-  }
-];
+import { CorvexAILogoWithSkeleton } from "@/components/CorvexAILogoWithSkeleton";
+import { features, solutions, resources } from "@/lib/navigation-data";
 
 export default function Navigation() {
   const pathname = usePathname();
