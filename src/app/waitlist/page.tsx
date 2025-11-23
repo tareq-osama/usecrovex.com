@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<null | "success" | "error" | "already-subscribed">(null);
+  const [status, setStatus] = useState<null | "success" | "error" | "already-subscribed" | "rate-limited">(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,12 +16,16 @@ export default function WaitlistPage() {
     setStatus(null);
 
     try {
+      // Get honeypot field value (should be empty)
+      const form = e.currentTarget as HTMLFormElement;
+      const honeypot = (form.querySelector('input[name="website"]') as HTMLInputElement)?.value || '';
+
       const response = await fetch("/api/waitlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, honeypot }),
       });
 
       const data = await response.json();
@@ -30,6 +34,8 @@ export default function WaitlistPage() {
         // Handle specific error cases
         if (response.status === 409) {
           setStatus("already-subscribed");
+        } else if (response.status === 429) {
+          setStatus("rate-limited");
         } else {
           setStatus("error");
         }
@@ -60,6 +66,15 @@ export default function WaitlistPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {/* Honeypot field - hidden from users, catches bots */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              style={{ position: 'absolute', left: '-9999px' }}
+              aria-hidden="true"
+            />
             <Input
               required
               type="email"
@@ -85,6 +100,11 @@ export default function WaitlistPage() {
           {status === "already-subscribed" && (
             <div className="mt-4 p-3 rounded-md text-center bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
               This email is already on the waitlist. Thank you!
+            </div>
+          )}
+          {status === "rate-limited" && (
+            <div className="mt-4 p-3 rounded-md text-center bg-yellow-50 dark:bg-yellow-950 text-yellow-800 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800">
+              Too many requests. Please wait a moment and try again.
             </div>
           )}
           {status === "error" && (
