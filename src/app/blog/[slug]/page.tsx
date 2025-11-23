@@ -106,70 +106,76 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section with Featured Image */}
-      <section className="relative w-full overflow-hidden">
-        {post.featuredImage?.node && (
-          <div className="absolute inset-0 w-full h-[500px]">
-            <Image
-              src={post.featuredImage.node.sourceUrl}
-              alt={post.featuredImage.node.altText || post.title}
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
-          </div>
-        )}
-        <div className={`relative ${post.featuredImage?.node ? "pt-32 pb-16" : "pt-24 pb-12"} px-6`}>
-          <div className="max-w-4xl mx-auto">
-            <Link href="/blog">
-              <Button variant="ghost" size="sm" className="mb-8">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Blog
-              </Button>
-            </Link>
-
-            {/* Categories */}
-            {post.categories.nodes.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {post.categories.nodes.map((category) => (
-                  <span
-                    key={category.slug}
-                    className="text-xs font-medium text-primary bg-primary/10 px-3 py-1 rounded-full"
-                  >
-                    {category.name}
-                  </span>
-                ))}
+      <section className="w-full pt-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className={`relative overflow-hidden rounded-2xl ${
+            post.featuredImage?.node ? "bg-muted/50" : "bg-muted/30"
+          }`}>
+            {post.featuredImage?.node && (
+              <div className="absolute inset-0 w-full h-[500px]">
+                <Image
+                  src={post.featuredImage.node.sourceUrl}
+                  alt={post.featuredImage.node.altText || post.title}
+                  fill
+                  className="object-cover rounded-2xl"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 rounded-2xl" />
               </div>
             )}
+            <div className={`relative ${post.featuredImage?.node ? "pt-16 pb-16" : "pt-12 pb-12"} px-8 md:px-12`}>
+              <div className="max-w-4xl mx-auto">
+                <Link href="/blog">
+                  <Button variant="ghost" size="sm" className="mb-8">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Blog
+                  </Button>
+                </Link>
 
-            {/* Title */}
-            <h1 className={`text-4xl md:text-5xl font-bold mb-6 leading-tight ${
-              post.featuredImage?.node ? "text-white" : "text-foreground"
-            }`}>
-              {post.title}
-            </h1>
+                {/* Categories */}
+                {post.categories.nodes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.categories.nodes.map((category) => (
+                      <span
+                        key={category.slug}
+                        className="text-xs font-medium text-primary bg-primary/10 px-3 py-1 rounded-full"
+                      >
+                        {category.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
-            {/* Meta Information */}
-            <div className={`flex flex-wrap items-center gap-6 text-sm mb-8 ${
-              post.featuredImage?.node ? "text-white/90" : "text-muted-foreground"
-            }`}>
-              <div className="flex items-center gap-2">
-                <Image
-                  src={authorAvatar || ""}
-                  alt={post.author.node.nickname || post.author.node.name}
-                  width={20}
-                  height={20}
-                  className="rounded-full object-cover"
-                />
-                <span>{post.author.node.nickname || post.author.node.name}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDate(post.date)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{estimateReadingTime(post.content)}</span>
+                {/* Title */}
+                <h1 className={`text-4xl md:text-5xl font-bold mb-6 leading-tight ${
+                  post.featuredImage?.node ? "text-white" : "text-foreground"
+                }`}>
+                  {post.title}
+                </h1>
+
+                {/* Meta Information */}
+                <div className={`flex flex-wrap items-center gap-6 text-sm mb-8 ${
+                  post.featuredImage?.node ? "text-white/90" : "text-muted-foreground"
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src={authorAvatar || ""}
+                      alt={post.author.node.nickname || post.author.node.name}
+                      width={20}
+                      height={20}
+                      className="rounded-full object-cover"
+                    />
+                    <span>{post.author.node.nickname || post.author.node.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    <span>{formatDate(post.date)}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    <span>{estimateReadingTime(post.content)}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -247,7 +253,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </Card>
 
           {/* Navigation */}
-          <div className="mt-12 pt-8 border-t border-border">
+          <div className="mt-12 pt-8">
             <Link href="/blog">
               <Button variant="outline" className="w-full sm:w-auto">
                 <ArrowLeft className="mr-2 h-4 w-4" />
