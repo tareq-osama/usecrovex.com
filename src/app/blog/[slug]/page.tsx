@@ -54,7 +54,7 @@ export async function generateMetadata({
       description,
       type: "article",
       publishedTime: post.date,
-      authors: [post.author.node.name],
+      authors: [post.author.node.nickname || post.author.node.name],
       images: image ? [{ url: image }] : [],
     },
     twitter: {
@@ -154,8 +154,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               post.featuredImage?.node ? "text-white/90" : "text-muted-foreground"
             }`}>
               <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span>{post.author.node.name}</span>
+                <Image
+                  src={authorAvatar || ""}
+                  alt={post.author.node.nickname || post.author.node.name}
+                  width={20}
+                  height={20}
+                  className="rounded-full object-cover"
+                />
+                <span>{post.author.node.nickname || post.author.node.name}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
@@ -216,7 +222,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {authorAvatar ? (
                   <Image
                     src={authorAvatar}
-                    alt={post.author.node.name}
+                    alt={post.author.node.nickname || post.author.node.name}
                     width={64}
                     height={64}
                     className="rounded-full object-cover"
@@ -224,16 +230,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 ) : (
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <span className="text-primary font-semibold text-lg">
-                      {post.author.node.name.charAt(0).toUpperCase()}
+                      {(post.author.node.nickname || post.author.node.name).charAt(0).toUpperCase()}
                     </span>
                   </div>
                 )}
                 <div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {post.author.node.name}
+                    {post.author.node.nickname || post.author.node.name}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    Author at Corvex
+                    {post.author.node.jobDescription || ""}
                   </p>
                 </div>
               </div>

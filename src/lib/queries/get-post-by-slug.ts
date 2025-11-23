@@ -17,7 +17,9 @@ const GET_POST_BY_SLUG = `
           id
           databaseId
           name
+          nickname
           slug
+          jobDescription
           avatar {
             url
           }
@@ -71,7 +73,9 @@ export interface SinglePost extends WordPressPost {
       id: string;
       databaseId: number;
       name: string;
+      nickname?: string | null;
       slug: string;
+      jobDescription?: string | null;
       avatar?: {
         url: string;
       } | null;
