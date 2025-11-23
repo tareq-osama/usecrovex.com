@@ -17,7 +17,7 @@ import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { ModeToggle } from "@/components/marketing/mode-toggle";
-
+import { CorvexAILogoWithSkeleton } from "@/components/CorvexAILogoWithSkeleton"; 
 const features = [
   {
     title: "White-label client portal",
@@ -139,8 +139,8 @@ export default function Navigation() {
         <div className="mx-auto px-6">
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <Image src="/corvexlogo.svg" alt="Corvex Logo" width={150} height={100} />
+            <Link href="/" className="flex items-center h-10 w-40">
+              <CorvexAILogoWithSkeleton className="w-full h-full" />
             </Link>
 
             {/* Desktop Navigation */}

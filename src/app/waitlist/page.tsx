@@ -1,20 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Send, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import Threads from './Threads';
+import { CorvexAILogoWithSkeleton } from "@/components/CorvexAILogoWithSkeleton";
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<null | "success" | "error" | "already-subscribed" | "rate-limited">(null);
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Handle success state - show success component, then revert after 3 seconds
+  useEffect(() => {
+    if (status === "success") {
+      setShowSuccess(true);
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+        setStatus(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setStatus(null);
+    setShowSuccess(false);
 
     try {
       // Get honeypot field value (should be empty)
@@ -67,65 +84,118 @@ export default function WaitlistPage() {
       
       {/* Content Overlay */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
-        <Card className="w-full max-w-md bg-background/95 backdrop-blur-sm">
-        <CardHeader className="text-center space-y-2">
-          <CardTitle className="text-2xl font-bold">
-            Join our Waitlist
-          </CardTitle>
-          <CardDescription>
-            Be the first to know when we launch. Enter your email below.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            {/* Honeypot field - hidden from users, catches bots */}
-            <input
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              style={{ position: 'absolute', left: '-9999px' }}
-              aria-hidden="true"
-            />
-            <Input
-              required
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-label="Email address"
-              placeholder="you@example.com"
-              disabled={loading}
-            />
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full"
-            >
-              {loading ? "Joining..." : "Join Waitlist"}
-            </Button>
-          </form>
-          {status === "success" && (
-            <div className="mt-4 p-3 rounded-md text-center bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800">
-              You've been added to the waitlist! We'll notify you when we launch.
+        <div className="w-full max-w-md space-y-8 bg-background/80 backdrop-blur-sm border  border-border/50 rounded-lg p-8">
+          {/* Logo */}
+          <div className="flex flex-col items-center relative">
+            <CorvexAILogoWithSkeleton className="h-16 w-full max-w-60" />
+            <span className="absolute -top-2 -right-2 text-xs font-medium text-muted-foreground bg-muted/50 px-2 py-1 rounded-md border border-border/50">
+              Beta
+            </span>
+          </div>
+
+          {/* Tagline */}
+          <div className="text-center space-y-4">
+            <h2 className="text-xl font-medium text-foreground">
+              The Operating System For Your Agency
+              and One-Person Businesses
+            </h2>
+            <p className="text-base text-muted-foreground leading-relaxed max-w-md mx-auto">
+              Streamline everything with AI.<br />Automate Operations.<br /> 
+              
+              Put your client management to work with one seamless platform and Fully white-labeled client portal.
+            </p>
+          </div>
+
+          {/* Form or Success State */}
+          {showSuccess ? (
+            <div className="flex flex-col items-center justify-center space-y-4 p-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border/50">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <CheckCircle2 className="w-8 h-8 text-primary" />
+              </div>
+              <div className="text-center space-y-2">
+                <h3 className="text-lg font-semibold text-foreground">
+                  You're on the list!
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  We'll notify you when we launch.
+                </p>
+              </div>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Honeypot field - hidden from users, catches bots */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                style={{ position: 'absolute', left: '-9999px' }}
+                aria-hidden="true"
+              />
+              
+              {/* Email Input */}
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" />
+                <Input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-label="Email address"
+                  placeholder="you@example.com"
+                  disabled={loading}
+                  className="pl-10 h-12 bg-background/80 backdrop-blur-sm border-border/50 text-foreground placeholder:text-muted-foreground"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+              >
+                {loading ? (
+                  "Joining..."
+                ) : (
+                  <>
+                    <Send className="mr-2 w-4 h-4" />
+                    Join the waitlist
+                  </>
+                )}
+              </Button>
+
+              {/* Error Messages */}
+              {status === "already-subscribed" && (
+                <div className="p-3 rounded-md text-center text-sm bg-muted/50 text-muted-foreground border border-border/50">
+                  This email is already on the waitlist. Thank you!
+                </div>
+              )}
+              {status === "rate-limited" && (
+                <div className="p-3 rounded-md text-center text-sm bg-muted/50 text-muted-foreground border border-border/50">
+                  Too many requests. Please wait a moment and try again.
+                </div>
+              )}
+              {status === "error" && (
+                <div className="p-3 rounded-md text-center text-sm bg-destructive/10 text-destructive border border-destructive/20">
+                  Something went wrong. Please try again.
+                </div>
+              )}
+            </form>
           )}
-          {status === "already-subscribed" && (
-            <div className="mt-4 p-3 rounded-md text-center bg-blue-50 dark:bg-blue-950 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800">
-              This email is already on the waitlist. Thank you!
+
+          {/* Footer Links */}
+          <div className="text-center text-sm text-muted-foreground">
+            <div className="flex items-center justify-center gap-2">
+              <Link href="/terms" className="hover:text-foreground transition-colors">
+                Terms
+              </Link>
+              <span className="text-border">|</span>
+              <Link href="/privacy" className="hover:text-foreground transition-colors">
+                Privacy Policy
+              </Link>
             </div>
-          )}
-          {status === "rate-limited" && (
-            <div className="mt-4 p-3 rounded-md text-center bg-yellow-50 dark:bg-yellow-950 text-yellow-800 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800">
-              Too many requests. Please wait a moment and try again.
-            </div>
-          )}
-          {status === "error" && (
-            <div className="mt-4 p-3 rounded-md text-center bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800">
-              Something went wrong. Please try again.
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
