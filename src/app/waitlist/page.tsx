@@ -135,14 +135,14 @@ export default function WaitlistPage() {
               
               {/* Email Input */}
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" />
+                <Mail className="absolute z-10 left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground/50 " />
                 <Input
                   required
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   aria-label="Email address"
-                  placeholder="you@example.com"
+                  placeholder="you@workemail.com"
                   disabled={loading}
                   className="pl-10 h-12 bg-background/80 backdrop-blur-sm border-border/50 text-foreground placeholder:text-muted-foreground"
                 />

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { CorvexAILogoWithSkeleton } from "../CorvexAILogoWithSkeleton";
 
 const footerLinks = {
   Links: [
@@ -32,8 +33,12 @@ export default function Footer() {
     <footer className="w-full border-t border-border/20 bg-background/50">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
+
+
         {/* Footer Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-12">
+
+
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
               <h3 className="font-semibold text-foreground mb-4">{category}</h3>
@@ -45,6 +50,9 @@ export default function Footer() {
                        className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                        {link.title}
                      </Link>
+
+
+                     
                    </li>
                  ))}
               </ul>
@@ -53,13 +61,17 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-border/20">
+        <div className="flex flex-col md:flex-row items-end justify-between pt-8 border-t border-border/20">
           <div className="flex items-center gap-2 mb-4 md:mb-0">
-          
-                      {/* Logo */}
-                      <Link href="/" className="flex items-center gap-2">
-                        <Image src="/corvexlogo.svg" alt="Corvex Logo" width={200} height={100} />
-                      </Link>
+
+
+        {/* Logo */}
+
+        <Link href="/" className="flex items-start justify-start gap-2">
+        <CorvexAILogoWithSkeleton className="w-full max-w-40" />
+        </Link> 
+
+                 
 
           </div>
           
