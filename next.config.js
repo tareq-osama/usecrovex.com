@@ -29,6 +29,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'gravatar.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'website.usecorvex.com',
+      },
       // Add your WordPress domain pattern here if using a custom domain
       // Example: { protocol: 'https', hostname: 'your-wordpress-site.com' }
       // Or use: { protocol: 'https', hostname: '**' } to allow all domains (less secure)
