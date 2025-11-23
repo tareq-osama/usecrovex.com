@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Threads from './Threads';
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
@@ -54,8 +55,19 @@ export default function WaitlistPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4 py-12">
-      <Card className="w-full max-w-md">
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Threads Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <Threads
+          amplitude={1}
+          distance={0}
+          enableMouseInteraction={true}
+        />
+      </div>
+      
+      {/* Content Overlay */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
+        <Card className="w-full max-w-md bg-background/95 backdrop-blur-sm">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-2xl font-bold">
             Join our Waitlist
@@ -114,6 +126,7 @@ export default function WaitlistPage() {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
