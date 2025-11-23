@@ -249,7 +249,7 @@ export default function Navigation() {
                 <Link href="https://app.usecorvex.com">Login</Link>
               </Button>
               <Button size="sm" asChild>
-                <Link href="https://app.usecorvex.com/signup">Get started</Link>
+                <Link href="/waitlist"> Join the waitlist</Link>
               </Button>
             </div>
 
