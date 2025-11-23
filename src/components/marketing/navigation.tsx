@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ModeToggle } from "@/components/marketing/mode-toggle";
 import { CorvexAILogoWithSkeleton } from "@/components/CorvexAILogoWithSkeleton";
 import { features, solutions, resources } from "@/lib/navigation-data";
+import { SearchDialog } from "@/components/marketing/search-dialog";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -192,6 +193,7 @@ export default function Navigation() {
 
             {/* Desktop CTA */}
             <div className="hidden lg:flex items-center space-x-4">
+              <SearchDialog />
               <ModeToggle />
               <Button variant="ghost" size="sm" asChild>
                 <Link href="https://app.usecorvex.com">Login</Link>
@@ -301,6 +303,9 @@ export default function Navigation() {
 
                 {/* Mobile CTA */}
                 <div className="flex flex-col space-y-3 pt-4 border-t border-border/20">
+                  <div className="flex justify-center">
+                    <SearchDialog />
+                  </div>
                   <div className="flex justify-center">
                     <ModeToggle />
                   </div>
