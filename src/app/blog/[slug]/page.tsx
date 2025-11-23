@@ -17,6 +17,11 @@ interface BlogPostPageProps {
   }>;
 }
 
+// Enable dynamic rendering - revalidate every 60 seconds (ISR)
+export const revalidate = 60;
+// Force dynamic rendering on each request (alternative to revalidate)
+// export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
   const posts = await getPosts(100);
   return posts.map((post) => ({

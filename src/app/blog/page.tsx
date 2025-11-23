@@ -8,6 +8,11 @@ import { getPosts, WordPressPost } from "@/lib/queries/get-posts";
 import { formatDate } from "@/lib/utils/date-formatter";
 import { stripHtml, estimateReadingTime } from "@/lib/utils";
 
+// Enable dynamic rendering - revalidate every 60 seconds (ISR)
+export const revalidate = 60;
+// Force dynamic rendering on each request (alternative to revalidate)
+// export const dynamic = 'force-dynamic';
+
 export default async function BlogPage() {
   const posts = await getPosts(20);
   const featuredPost = posts[0];
