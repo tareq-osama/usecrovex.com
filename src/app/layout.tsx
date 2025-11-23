@@ -7,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import { Analytics } from '@vercel/analytics/react'
 import Script from 'next/script'
 import GoogleTagManager from '@/components/seo/google-tag-manager'
+import Intercom from '@/components/seo/intercom'
 import "./globals.css"
 import Navigation from "@/components/marketing/navigation"
 
@@ -175,6 +176,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://widget.intercom.io" />
       </head>
       <body className={`${inter.className} antialiased`} suppressHydrationWarning>
         {/* Google Tag Manager (noscript) - BODY */}
@@ -203,6 +205,9 @@ export default function RootLayout({
         </ThemeProvider>
         <SpeedInsights />
         <Analytics />
+        
+        {/* Intercom Chat */}
+        <Intercom />
       </body>
     </html>
   )
