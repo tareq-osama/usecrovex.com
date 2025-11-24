@@ -88,12 +88,12 @@ export default function Navigation() {
         <div className="mx-auto px-6">
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
-            <Link href="/" className="flex items-center h-10 w-40">
+            <Link href="/" className="flex items-center h-8 w-32">
               <CorvexAILogoWithSkeleton className="w-full h-full" />
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden lg:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
               <NavigationMenu>
                 <NavigationMenuList className="space-x-6">
                   {/* Features */}
