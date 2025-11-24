@@ -140,7 +140,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 )}
 
                 {/* Title */}
-                <h1 className={`text-4xl md:text-5xl font-bold mb-6 leading-tight ${
+                <h1 className={`text-4xl md:text-5xl font-bold mb-6 [line-height:1.2] ${
                   post.featuredImage?.node ? "text-white" : "text-foreground"
                 }`}>
                   {post.title}
@@ -180,8 +180,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="max-w-4xl mx-auto px-6">
           <div
             className="prose prose-lg dark:prose-invert max-w-none
-              prose-headings:font-bold prose-headings:text-foreground
-              prose-p:text-foreground/90 prose-p:leading-relaxed
+              prose-headings:font-bold prose-headings:text-foreground prose-headings:mt-8 prose-headings:mb-4 prose-headings:[line-height:1.2]
+              prose-h1:text-4xl prose-h1:font-bold prose-h1:[line-height:1.2] prose-h1:mt-12 prose-h1:mb-6
+              prose-h2:text-3xl prose-h2:font-bold prose-h2:[line-height:1.2] prose-h2:mt-10 prose-h2:mb-5
+              prose-h3:text-2xl prose-h3:font-semibold prose-h3:[line-height:1.2] prose-h3:mt-8 prose-h3:mb-4
+              prose-h4:text-xl prose-h4:font-semibold prose-h4:[line-height:1.2] prose-h4:mt-6 prose-h4:mb-3
+              prose-h5:text-lg prose-h5:font-semibold prose-h5:[line-height:1.2] prose-h5:mt-4 prose-h5:mb-2
+              prose-h6:text-base prose-h6:font-semibold prose-h6:[line-height:1.2] prose-h6:mt-4 prose-h6:mb-2
+              prose-p:text-foreground/90 prose-p:leading-relaxed prose-p:mb-4
               prose-a:text-primary prose-a:no-underline hover:prose-a:underline
               prose-strong:text-foreground prose-strong:font-semibold
               prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded
@@ -234,7 +240,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                 )}
                 <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
+                  <h3 className="text-lg font-semibold text-foreground [line-height:1.2] mb-1">
                     {post.author.node.nickname || post.author.node.name}
                   </h3>
                   <p className="text-sm text-muted-foreground">

@@ -33,7 +33,7 @@ export default async function BlogPage() {
               </p>
               
               {/* Main headline */}
-              <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-[1.1] mb-6 tracking-tight">
+              <h1 className="text-5xl md:text-6xl font-bold text-foreground [line-height:1.2] mb-6 tracking-tight">
                 Latest insights on
                 <br />
                 <span className="relative">
@@ -57,7 +57,7 @@ export default async function BlogPage() {
                   <div className="flex flex-col">
                     <div className="bg-muted/30 p-6 flex-1">
                       <p className="text-sm text-muted-foreground mb-2">Featured Post</p>
-                      <h2 className="text-xl font-bold text-foreground mb-3 line-clamp-2">
+                      <h2 className="text-xl font-bold text-foreground [line-height:1.2] mb-3 line-clamp-2">
                         {featuredPost.title}
                       </h2>
                       <p className="text-muted-foreground mb-4 line-clamp-3 text-sm">
@@ -114,7 +114,7 @@ export default async function BlogPage() {
       <section className="w-full py-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-foreground mb-6">
+            <h2 className="text-4xl font-bold text-foreground [line-height:1.2] mb-6">
               Latest articles
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -158,7 +158,7 @@ export default async function BlogPage() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-semibold text-foreground mb-3 line-clamp-2">
+                      <h3 className="font-semibold text-foreground [line-height:1.2] mb-3 line-clamp-2">
                         {post.title}
                       </h3>
                       <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-grow">
@@ -200,7 +200,7 @@ export default async function BlogPage() {
       {/* Newsletter Section */}
       <section className="w-full py-24 bg-muted/30">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl font-bold text-foreground [line-height:1.2] mb-6">
             Stay updated with our newsletter
           </h2>
           <p className="text-lg text-muted-foreground mb-8">

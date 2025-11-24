@@ -7,7 +7,7 @@ export default function BlogPostNotFound() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center space-y-6">
-        <h1 className="text-4xl font-bold text-foreground">Post Not Found</h1>
+        <h1 className="text-4xl font-bold text-foreground [line-height:1.2]">Post Not Found</h1>
         <p className="text-lg text-muted-foreground">
           The blog post you're looking for doesn't exist or has been moved.
         </p>
