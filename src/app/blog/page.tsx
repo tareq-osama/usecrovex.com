@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, Calendar, Clock, User } from "lucide-react";
-import { getPosts, WordPressPost } from "@/lib/queries/get-posts";
+import { getPosts, WordPressPost } from "@/lib/queries/get-posts-payload";
 import { formatDate } from "@/lib/utils/date-formatter";
-import { stripHtml, estimateReadingTime } from "@/lib/utils";
+import { stripHtml } from "@/lib/utils";
+import { estimateReadingTimeFromLexical } from "@/lib/utils/lexical";
 
 // Force dynamic rendering on each request for instant updates
 export const dynamic = 'force-dynamic';
@@ -74,7 +75,7 @@ export default async function BlogPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          <span>{estimateReadingTime(featuredPost.content)}</span>
+                          <span>{estimateReadingTimeFromLexical(featuredPost.content)}</span>
                         </div>
                       </div>
                       {featuredPost.categories.nodes.length > 0 && (
@@ -177,7 +178,7 @@ export default async function BlogPage() {
                       <div className="flex items-center justify-between mt-auto">
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          {estimateReadingTime(post.content)}
+                          {estimateReadingTimeFromLexical(post.content)}
                         </span>
                         <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
                           Read more

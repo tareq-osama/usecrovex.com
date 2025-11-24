@@ -35,6 +35,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'payload.usecorvex.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'pub-cc505a2fce45490cb821f638d2b5bd76.r2.dev',
       },
       {

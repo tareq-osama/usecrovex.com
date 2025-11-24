@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
-import { WordPressPost } from "@/lib/queries/get-posts";
+import { WordPressPost } from "@/lib/queries/get-posts-payload";
 import { stripHtml } from "@/lib/utils";
 import { formatDate } from "@/lib/utils/date-formatter";
 

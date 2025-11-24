@@ -5,11 +5,13 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Calendar, Clock, User, Tag } from "lucide-react";
-import { getPostBySlug } from "@/lib/queries/get-post-by-slug";
-import { getPosts } from "@/lib/queries/get-posts";
-import { getUserProfile } from "@/lib/queries/get-user-profile";
+import { getPostBySlug } from "@/lib/queries/get-post-by-slug-payload";
+import { getPosts } from "@/lib/queries/get-posts-payload";
+// Removed getUserProfile - using Payload CMS author data directly
 import { formatDate } from "@/lib/utils/date-formatter";
-import { estimateReadingTime, stripHtml } from "@/lib/utils";
+import { stripHtml } from "@/lib/utils";
+import { estimateReadingTimeFromLexical } from "@/lib/utils/lexical";
+import { LexicalContent } from "@/components/blog/LexicalContent";
 import type { Metadata } from "next";
 
 interface BlogPostPageProps {
@@ -67,34 +69,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // Try to get R2 profile picture - first from post query, then from separate user query
-  let authorAvatar = post.author.node.r2ProfilePicture || null;
-  
-  // If not available in post query, try fetching separately
-  if (!authorAvatar) {
-    const authorProfile = await getUserProfile(post.author.node.id, post.author.node.databaseId);
-    authorAvatar = authorProfile?.r2ProfilePicture || null;
-  }
-  
-  // Only fall back to Gravatar if R2 picture is not available
-  // Don't use Gravatar if we have an R2 URL
-  if (!authorAvatar) {
-    authorAvatar = post.author.node.avatar?.url || null;
-  }
-  
-  // Debug: Log what we're getting (remove in production)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('=== FINAL AVATAR RESOLUTION ===');
-    console.log('Author ID:', post.author.node.id);
-    console.log('Author databaseId:', post.author.node.databaseId);
-    console.log('Author name:', post.author.node.name);
-    console.log('r2ProfilePicture from post query:', post.author.node.r2ProfilePicture);
-    console.log('avatar.url from post query:', post.author.node.avatar?.url);
-    console.log('Final authorAvatar:', authorAvatar);
-    console.log('Is R2 URL:', authorAvatar?.includes('r2.dev'));
-    console.log('Is Gravatar URL:', authorAvatar?.includes('gravatar.com'));
-    console.log('================================');
-  }
+  // Get author avatar from Payload CMS data
+  const authorAvatar = post.author.node.avatar?.url || post.author.node.r2ProfilePicture || null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -166,7 +142,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    <span>{estimateReadingTime(post.content)}</span>
+                    <span>{estimateReadingTimeFromLexical(post.content)}</span>
                   </div>
                 </div>
               </div>
@@ -178,7 +154,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {/* Article Content */}
       <article className="w-full py-16">
         <div className="max-w-4xl mx-auto px-6">
-          <div
+          <LexicalContent
+            content={post.content}
             className="prose prose-lg dark:prose-invert max-w-none
               prose-headings:font-bold prose-headings:text-foreground prose-headings:mt-8 prose-headings:mb-4 prose-headings:[line-height:1.2]
               prose-h1:text-4xl prose-h1:font-bold prose-h1:[line-height:1.2] prose-h1:mt-12 prose-h1:mb-6
@@ -197,7 +174,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               prose-ul:list-disc prose-ol:list-decimal
               prose-li:text-foreground/90
               prose-hr:border-border"
-            dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
           {/* Tags */}
