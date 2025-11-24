@@ -18,17 +18,10 @@ interface BlogPostPageProps {
   }>;
 }
 
-// Enable dynamic rendering - revalidate every 60 seconds (ISR)
-export const revalidate = 60;
-// Force dynamic rendering on each request (alternative to revalidate)
-// export const dynamic = 'force-dynamic';
-
-export async function generateStaticParams() {
-  const posts = await getPosts(100);
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
+// Force dynamic rendering on each request for instant updates
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const dynamicParams = true; // Allow dynamic routes that weren't pre-generated
 
 export async function generateMetadata({
   params,
