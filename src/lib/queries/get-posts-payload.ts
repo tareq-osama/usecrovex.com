@@ -57,6 +57,14 @@ export interface BlogPost {
       sourceUrl: string;
     } | null;
   };
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: {
+      sourceUrl: string;
+    } | null;
+  };
+  relatedPosts?: BlogPost[];
 }
 
 /**

@@ -140,6 +140,20 @@ function mapPayloadPostToBlogPost(payloadPost: PayloadPost): BlogPost {
             : null,
         }
       : undefined,
+    meta: payloadPost.meta
+      ? {
+          title: payloadPost.meta.title || null,
+          description: payloadPost.meta.description || null,
+          image: payloadPost.meta.image
+            ? {
+                sourceUrl: getAbsoluteUrl(payloadPost.meta.image.url),
+              }
+            : null,
+        }
+      : undefined,
+    // Note: relatedPosts might be IDs or full objects depending on depth
+    // For now, we'll handle it when rendering
+    relatedPosts: undefined, // Will be populated separately if needed
   };
 }
 

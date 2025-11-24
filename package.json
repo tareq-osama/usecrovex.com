@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/third-parties": "^15.4.2",
+    "@payloadcms/richtext-lexical": "^3.64.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
