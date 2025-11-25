@@ -7,7 +7,7 @@ import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-interface MediaResource {
+export interface MediaResource {
   id: string;
   alt?: string;
   url?: string;

@@ -13,6 +13,7 @@ import {
 } from '@payloadcms/richtext-lexical/react'
 import { cn } from "@/lib/utils";
 import { MediaBlock } from "./MediaBlock";
+import type { MediaResource } from "./MediaBlock";
 import "./RichText.css";
 
 // Handle internal document links - convert to blog post URLs
@@ -30,15 +31,22 @@ const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
   blocks: {
-    mediaBlock: ({ node }) => (
-      <MediaBlock
-        className="col-start-1 col-span-3"
-        imgClassName="m-0"
-        {...node.fields}
-        enableGutter={false}
-        disableInnerContainer={true}
-      />
-    ),
+    mediaBlock: ({ node }: { node: { fields: { media?: MediaResource | string | number; [key: string]: unknown } } }) => {
+      const { media, ...restFields } = node.fields;
+      if (!media) {
+        return null;
+      }
+      return (
+        <MediaBlock
+          media={media}
+          className="col-start-1 col-span-3"
+          imgClassName="m-0"
+          {...restFields}
+          enableGutter={false}
+          disableInnerContainer={true}
+        />
+      );
+    },
   },
 })
 
