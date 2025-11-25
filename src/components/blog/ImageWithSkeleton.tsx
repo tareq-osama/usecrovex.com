@@ -63,8 +63,11 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
 
   return (
     <div 
-      className={cn("relative", !fill && "inline-block")} 
-      style={!fill && width && height ? { width, height } : undefined}
+      className={cn(
+        "relative",
+        !fill && "inline-block"
+      )} 
+      style={!fill && width && height ? { width, height } : fill ? { width: "100%", height: "100%" } : undefined}
     >
       {isLoading && (
         <Skeleton

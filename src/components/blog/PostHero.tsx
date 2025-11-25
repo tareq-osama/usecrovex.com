@@ -33,21 +33,23 @@ export const PostHero: React.FC<PostHeroProps> = ({ post }) => {
         }`}>
           {/* Hero Image with Gradient Overlay */}
           {heroImageUrl && (
-            <div className="absolute inset-0 w-full h-[500px]">
-              <ImageWithSkeleton
-                src={heroImageUrl}
-                alt={heroImageAlt}
-                fill
-                className="rounded-2xl"
-                priority
-                objectFit="cover"
-              />
+            <div className="absolute inset-0 w-full ">
+              <div className="relative w-full h-full">
+                <ImageWithSkeleton
+                  src={heroImageUrl}
+                  alt={heroImageAlt}
+                  fill
+                  className="rounded-2xl"
+                  priority
+                  objectFit="cover"
+                />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 rounded-2xl z-10" />
             </div>
           )}
 
           {/* Content */}
-          <div className={`relative ${heroImageUrl ? "pt-16 pb-16" : "pt-12 pb-12"} px-8 md:px-12`}>
+          <div className={`relative ${heroImageUrl ? "pt-16 pb-16" : "pt-12 pb-12"} px-8 md:px-12 z-10`}>
             <div className="max-w-4xl mx-auto">
               {/* Back to Blog Button */}
               <Link href="/blog">
