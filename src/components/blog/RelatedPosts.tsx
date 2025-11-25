@@ -3,8 +3,8 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { ImageWithSkeleton } from "@/components/blog/ImageWithSkeleton";
 import type { BlogPost } from "@/lib/queries/get-posts-payload";
 
 interface RelatedPostsProps {
@@ -25,12 +25,13 @@ export const RelatedPosts: React.FC<RelatedPostsProps> = ({ className, posts }) 
           >
             <div className="relative w-full aspect-video">
               {post.featuredImage?.node ? (
-                <Image
+                <ImageWithSkeleton
                   src={post.featuredImage.node.sourceUrl}
                   alt={post.featuredImage.node.altText || post.title}
                   fill
-                  className="object-cover"
+                  className=""
                   sizes="(max-width: 768px) 100vw, 50vw"
+                  objectFit="cover"
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">

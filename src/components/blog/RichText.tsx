@@ -12,6 +12,7 @@ import {
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 import { cn } from "@/lib/utils";
+import "./RichText.css";
 
 // Handle internal document links - convert to blog post URLs
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {

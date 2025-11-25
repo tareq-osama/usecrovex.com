@@ -1,10 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight, Calendar, Clock, User } from "lucide-react";
+import { ImageWithSkeleton } from "@/components/blog/ImageWithSkeleton";
 import { getPosts, WordPressPost } from "@/lib/queries/get-posts-payload";
 import { formatDate } from "@/lib/utils/date-formatter";
 import { stripHtml } from "@/lib/utils";
@@ -93,13 +92,14 @@ export default async function BlogPage() {
                       <Button size="sm">Read full article</Button>
                     </div>
                     {featuredPost.featuredImage?.node && (
-                      <div className="bg-muted/50 h-48 overflow-hidden">
-                        <Image
+                      <div className="bg-muted/50 h-48 overflow-hidden relative">
+                        <ImageWithSkeleton
                           src={featuredPost.featuredImage.node.sourceUrl}
                           alt={featuredPost.featuredImage.node.altText || featuredPost.title}
                           width={600}
                           height={300}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full"
+                          objectFit="cover"
                         />
                       </div>
                     )}
@@ -132,15 +132,16 @@ export default async function BlogPage() {
                     <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
                     <CardContent className="p-6 flex flex-col h-full">
                       {post.featuredImage?.node && (
-                        <div className="mb-4 -mx-6 -mt-6 relative overflow-hidden">
-                          <Image
+                        <div className="mb-4 -mx-6 -mt-6 relative overflow-hidden h-48">
+                          <ImageWithSkeleton
                             src={post.featuredImage.node.sourceUrl}
                             alt={post.featuredImage.node.altText || post.title}
                             width={600}
                             height={300}
-                            className="w-full h-48 object-cover"
+                            className="w-full h-full"
+                            objectFit="cover"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20" />
                         </div>
                       )}
                       <div className="mb-4 flex flex-wrap gap-2">
