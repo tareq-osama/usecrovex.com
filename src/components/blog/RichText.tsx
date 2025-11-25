@@ -12,6 +12,7 @@ import {
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 import { cn } from "@/lib/utils";
+import { MediaBlock } from "./MediaBlock";
 import "./RichText.css";
 
 // Handle internal document links - convert to blog post URLs
@@ -24,10 +25,21 @@ const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   return relationTo === 'posts' ? `/blog/${slug}` : `/${slug}`
 }
 
-// Simple converters - can be extended with blocks later
+// Converters with custom blocks support
 const jsxConverters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
   ...LinkJSXConverter({ internalDocToHref }),
+  blocks: {
+    mediaBlock: ({ node }) => (
+      <MediaBlock
+        className="col-start-1 col-span-3"
+        imgClassName="m-0"
+        {...node.fields}
+        enableGutter={false}
+        disableInnerContainer={true}
+      />
+    ),
+  },
 })
 
 interface RichTextProps extends React.HTMLAttributes<HTMLDivElement> {
