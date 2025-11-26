@@ -16,7 +16,7 @@ export default function FounderMemo() {
   // - "over 100+ agencies" testimonial
   // - "Book a free demo call" CTA button
   // - Founder memo message about digital agencies
-  // - Anthony Riera's signature
+  // - Tareq's signature
 
   return (
     <>
@@ -97,7 +97,7 @@ export default function FounderMemo() {
             <span className="text-xs font-medium text-foreground">AR</span>
           </div>
           <div>
-            <p className="text-sm font-semibold text-foreground">Anthony Riera</p>
+            <p className="text-sm font-semibold text-foreground">Tareq</p>
             <p className="text-xs text-muted-foreground">Founder of Corvex</p>
           </div>
         </div>
