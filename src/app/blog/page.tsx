@@ -98,7 +98,7 @@ export default async function BlogPage() {
                           alt={featuredPost.featuredImage.node.altText || featuredPost.title}
                           width={600}
                           height={300}
-                          className="w-full h-full"
+                          className="w-full h-full object-cover"
                           objectFit="cover"
                         />
                       </div>
@@ -124,78 +124,78 @@ export default async function BlogPage() {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherPosts.length > 0 ? (
-              otherPosts.map((post) => (
-                <Link key={post.id} href={`/blog/${post.slug}`}>
-                  <Card className="border-border/20 hover:border-primary/20 transition-colors h-full group relative overflow-hidden">
-                    {/* Shimmer effect */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
-                    <CardContent className="p-6 flex flex-col h-full">
-                      {post.featuredImage?.node && (
-                        <div className="mb-4 -mx-6 -mt-6 relative overflow-hidden h-48">
-                          <ImageWithSkeleton
-                            src={post.featuredImage.node.sourceUrl}
-                            alt={post.featuredImage.node.altText || post.title}
-                            width={600}
-                            height={300}
-                            className="w-full h-full"
-                            objectFit="cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20" />
-                        </div>
-                      )}
-                      <div className="mb-4 flex flex-wrap gap-2">
-                        {post.categories.nodes.length > 0 ? (
-                          post.categories.nodes.slice(0, 2).map((category) => (
-                            <span
-                              key={category.slug}
-                              className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full"
-                            >
-                              {category.name}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
-                            Article
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="font-semibold text-foreground [line-height:1.2] mb-3 line-clamp-2">
-                        {post.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-grow">
-                        {stripHtml(post.excerpt)}
-                      </p>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                        <div className="flex items-center gap-1">
-                          <User className="h-3 w-3" />
-                          <span>{post.author.node.name}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          <span>{formatDate(post.date)}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-between mt-auto">
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {estimateReadingTimeFromLexical(post.content)}
-                        </span>
-                        <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
-                          Read more
-                          <ArrowRight className="ml-1 h-3 w-3" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <p className="text-muted-foreground">No posts found. Check back soon for new articles!</p>
+  {otherPosts.length > 0 ? (
+    otherPosts.map((post) => (
+      <Link key={post.id} href={`/blog/${post.slug}`}>
+        <Card className="border-border/20 hover:border-primary/20 transition-colors h-full group relative overflow-hidden">
+          {/* Shimmer effect */}
+          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+          <CardContent className="p-6 flex flex-col h-full">
+            {post.featuredImage?.node && (
+              <div className="mb-4 -mx-6 -mt-6 relative overflow-hidden h-48">
+                <ImageWithSkeleton
+                  src={post.featuredImage.node.sourceUrl}
+                  alt={post.featuredImage.node.altText || post.title}
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20" />
               </div>
             )}
-          </div>
+            <div className="mb-4 flex flex-wrap gap-2">
+              {post.categories.nodes.length > 0 ? (
+                post.categories.nodes.slice(0, 2).map((category) => (
+                  <span
+                    key={category.slug}
+                    className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full"
+                  >
+                    {category.name}
+                  </span>
+                ))
+              ) : (
+                <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
+                  Article
+                </span>
+              )}
+            </div>
+            <h3 className="font-semibold text-foreground [line-height:1.2] mb-3 line-clamp-2">
+              {post.title}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-grow">
+              {stripHtml(post.excerpt)}
+            </p>
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
+              <div className="flex items-center gap-1">
+                <User className="h-3 w-3" />
+                <span>{post.author.node.name}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="h-3 w-3" />
+                <span>{formatDate(post.date)}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-auto">
+              <span className="text-xs text-muted-foreground flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                {estimateReadingTimeFromLexical(post.content)}
+              </span>
+              <Button variant="ghost" size="sm" className="text-primary hover:text-primary">
+                Read more
+                <ArrowRight className="ml-1 h-3 w-3" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    ))
+  ) : (
+    <div className="col-span-full text-center py-12">
+      <p className="text-muted-foreground">No posts found. Check back soon for new articles!</p>
+    </div>
+  )}
+</div>
+
+
         </div>
       </section>
 

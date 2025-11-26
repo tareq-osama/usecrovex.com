@@ -15,6 +15,7 @@ interface ImageWithSkeletonProps {
   priority?: boolean;
   sizes?: string;
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+  objectPosition?: string;
 }
 
 export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
@@ -27,6 +28,7 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
   priority = false,
   sizes,
   objectFit = "cover",
+  objectPosition = "center",
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -82,7 +84,7 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
           className={imageClasses}
           priority={priority}
           sizes={sizes}
-          style={{ objectFit }}
+          style={{ objectFit, objectPosition }}
           onLoad={handleLoad}
           onError={handleError}
         />
@@ -95,7 +97,7 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
           className={imageClasses}
           priority={priority}
           sizes={sizes}
-          style={{ objectFit }}
+          style={{ objectFit, objectPosition }}
           onLoad={handleLoad}
           onError={handleError}
         />
@@ -103,4 +105,3 @@ export const ImageWithSkeleton: React.FC<ImageWithSkeletonProps> = ({
     </div>
   );
 };
-
